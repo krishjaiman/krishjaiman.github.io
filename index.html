@@ -79,16 +79,6 @@
                 typing 2.5s steps(30, end) forwards,
                 blink-caret .75s step-end 4 forwards;
         }
-
-        .admin-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            background-color: #161b22;
-            border: 1px solid #30363d;
-        }
         .form-input, .form-textarea {
             background-color: #0d1117;
             border: 1px solid #30363d;
@@ -254,56 +244,6 @@
         </div>
     </footer>
 
-    <!-- Admin Modals -->
-    <div id="admin-login" class="admin-modal p-8 rounded-lg shadow-lg w-80 hidden relative">
-        <button onclick="closeAllModals()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-        <h3 class="text-xl font-bold mb-4 text-white">Admin Login</h3>
-        <input type="password" id="password" placeholder="Password" class="form-input w-full p-2 border rounded mb-4">
-        <button onclick="login()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
-    </div>
-
-    <div id="admin-choice-panel" class="admin-modal p-8 rounded-lg shadow-lg w-96 hidden relative">
-        <button onclick="logout()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-        <h3 class="text-xl font-bold mb-4 text-white text-center">Admin Menu</h3>
-        <div class="flex gap-4">
-            <button onclick="showProjectAdmin()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Manage Projects</button>
-            <button onclick="showBlogAdmin()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Manage Blogs</button>
-        </div>
-        <button onclick="logout()" class="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700 mt-4">Logout</button>
-    </div>
-
-    <div id="project-admin-panel" class="admin-modal p-8 rounded-lg shadow-lg w-96 hidden relative">
-         <button onclick="closeAdminPanels()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-        <h3 class="text-xl font-bold mb-4 text-white">Add New Project</h3>
-        <input type="text" id="project-title" placeholder="Project Title" class="form-input w-full p-2 rounded mb-2">
-        <input type="text" id="project-github-link" placeholder="GitHub Link" class="form-input w-full p-2 rounded mb-2">
-        <textarea id="project-description" placeholder="Short Description" class="form-textarea w-full p-2 rounded mb-4" rows="3"></textarea>
-        <label class="text-sm text-gray-400 mb-2 block">Thumbnail Image</label>
-        <input type="file" id="project-thumbnail" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-900/50 file:text-blue-300 hover:file:bg-blue-800/50 mb-4">
-        <button onclick="addProject()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Add Project</button>
-        <button onclick="closeAdminPanels()" class="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 mt-2">Back to Menu</button>
-    </div>
-
-    <div id="blog-admin-panel" class="admin-modal p-8 rounded-lg shadow-lg w-96 hidden relative">
-         <button onclick="closeAdminPanels()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-        <h3 class="text-xl font-bold mb-4 text-white">Add New Blog Post</h3>
-        <input type="text" id="blog-title" placeholder="Blog Title" class="form-input w-full p-2 rounded mb-2">
-        <input type="text" id="blog-link" placeholder="Medium Link" class="form-input w-full p-2 rounded mb-2">
-        <textarea id="blog-description" placeholder="Short Description" class="form-textarea w-full p-2 rounded mb-4" rows="3"></textarea>
-        <label class="text-sm text-gray-400 mb-2 block">Thumbnail Image</label>
-        <input type="file" id="blog-thumbnail" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-900/50 file:text-blue-300 hover:file:bg-blue-800/50 mb-4">
-        <button onclick="addBlog()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Add Blog</button>
-        <button onclick="closeAdminPanels()" class="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 mt-2">Back to Menu</button>
-    </div>
-
     <script>
         // --- Navigation ---
         const menuBtn = document.getElementById('menu-btn');
@@ -321,27 +261,55 @@
             document.querySelectorAll(`a[href="#${sectionId}"]`).forEach(l => l.classList.add('active'));
         }
 
-        // --- Data Storage Keys ---
-        const PROJECTS_STORAGE_KEY = 'portfolioProjectsV3';
-        const BLOGS_STORAGE_KEY = 'portfolioBlogsV3';
+        // --- Static Project Data ---
+        // To add a new project, copy a block from `{` to `}` and paste it at the beginning of the list.
+        // Fill in your details. For the thumbnail, use a public URL (e.g., from Imgur).
+        const projects = [
+            {
+                title: "AI-Powered Crop Yield Prediction",
+                description: "A machine learning model that uses satellite imagery and weather data to predict crop yields with high accuracy, aiding in precision agriculture.",
+                githubLink: "https://github.com/krishjaiman/your-repo-name",
+                thumbnail: "https://placehold.co/600x400/161b22/58a6ff?text=Project+1"
+            },
+            {
+                title: "LLM Safety with RAG Pipelines",
+                description: "Explored prompt leaking techniques and implemented Retrieval-Augmented Generation (RAG) pipelines to enhance Large Language Model safety and reliability.",
+                githubLink: "https://github.com/krishjaiman/your-repo-name",
+                thumbnail: "https://placehold.co/600x400/161b22/3fb950?text=Project+2"
+            },
+            {
+                title: "Portfolio Website V2",
+                description: "This very website! A dynamic, responsive portfolio built with HTML, Tailwind CSS, and vanilla JavaScript, featuring a no-code admin panel.",
+                githubLink: "https://github.com/krishjaiman/your-repo-name",
+                thumbnail: "https://placehold.co/600x400/161b22/f85149?text=Project+3"
+            }
+        ];
 
-        // --- Project Management ---
+        // --- Static Blog Data ---
+        // To add a new blog, copy a block and add it to the list.
+        // Use a public URL for the thumbnail.
+        const blogs = [
+            { 
+                title: 'Understanding RAG Pipelines', 
+                link: 'https://medium.com/@jaimankrish/understanding-rag-pipelines-retrieval-augmented-generation-455353591464', 
+                description: 'A deep dive into how Retrieval-Augmented Generation is changing the landscape of Large Language Models.',
+                thumbnail: "https://placehold.co/600x400/161b22/c9d1d9?text=Article+1"
+            },
+            { 
+                title: 'The PLeaK Technique in LLMs', 
+                link: '#', // Replace with actual link when available
+                description: 'Exploring the challenges in LLM safety through an in-depth study of the Prompt Leaking (PLeaK) technique.',
+                thumbnail: "https://placehold.co/600x400/161b22/c9d1d9?text=Article+2"
+            }
+        ];
+
+        // --- Rendering Functions ---
         const projectsGrid = document.getElementById('projects-grid');
-        let projects = [];
-
-        function saveProjects() {
-            localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projects));
-        }
-
-        function loadProjects() {
-            const storedProjects = localStorage.getItem(PROJECTS_STORAGE_KEY);
-            projects = storedProjects ? JSON.parse(storedProjects) : [];
-            renderProjects();
-        }
+        const blogsGrid = document.getElementById('blogs-grid');
 
         function renderProjects() {
-            if (projects.length === 0) {
-                projectsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No projects added yet. Add some from the admin panel!</p>';
+            if (!projects || projects.length === 0) {
+                projectsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No projects have been added yet.</p>';
                 return;
             }
             projectsGrid.innerHTML = projects.map((project, i) => `
@@ -358,55 +326,9 @@
             `).join('');
         }
 
-        function addProject() {
-            const title = document.getElementById('project-title').value;
-            const githubLink = document.getElementById('project-github-link').value;
-            const description = document.getElementById('project-description').value;
-            const thumbnailFile = document.getElementById('project-thumbnail').files[0];
-
-            if (!title || !githubLink || !description) {
-                alert('Please fill all text fields.');
-                return;
-            }
-
-            const processProject = (thumbnailData) => {
-                projects.unshift({ title, githubLink, description, thumbnail: thumbnailData });
-                saveProjects();
-                renderProjects();
-                document.getElementById('project-admin-panel').classList.add('hidden');
-                document.getElementById('project-title').value = '';
-                document.getElementById('project-github-link').value = '';
-                document.getElementById('project-description').value = '';
-                document.getElementById('project-thumbnail').value = '';
-                adminChoicePanel.classList.remove('hidden');
-            };
-
-            if (thumbnailFile) {
-                const reader = new FileReader();
-                reader.onload = (e) => processProject(e.target.result);
-                reader.readAsDataURL(thumbnailFile);
-            } else {
-                processProject(null);
-            }
-        }
-
-        // --- Blog Management ---
-        const blogsGrid = document.getElementById('blogs-grid');
-        let blogs = [];
-
-        function saveBlogs() {
-            localStorage.setItem(BLOGS_STORAGE_KEY, JSON.stringify(blogs));
-        }
-
-        function loadBlogs() {
-            const storedBlogs = localStorage.getItem(BLOGS_STORAGE_KEY);
-            blogs = storedBlogs ? JSON.parse(storedBlogs) : [];
-            renderBlogs();
-        }
-
         function renderBlogs() {
-            if (blogs.length === 0) {
-                blogsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No blog posts yet. Stay tuned!</p>';
+            if (!blogs || blogs.length === 0) {
+                blogsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No blog posts have been added yet.</p>';
                 return;
             }
             blogsGrid.innerHTML = blogs.map((blog, i) => `
@@ -420,94 +342,6 @@
             `).join('');
         }
         
-        function addBlog() {
-            const title = document.getElementById('blog-title').value;
-            const link = document.getElementById('blog-link').value;
-            const description = document.getElementById('blog-description').value;
-            const thumbnailFile = document.getElementById('blog-thumbnail').files[0];
-
-            if (!title || !link || !description) {
-                alert('Please fill all text fields.');
-                return;
-            }
-            
-            const processBlog = (thumbnailData) => {
-                blogs.unshift({ title, link, description, thumbnail: thumbnailData });
-                saveBlogs();
-                renderBlogs();
-                document.getElementById('blog-admin-panel').classList.add('hidden');
-                document.getElementById('blog-title').value = '';
-                document.getElementById('blog-link').value = '';
-                document.getElementById('blog-description').value = '';
-                document.getElementById('blog-thumbnail').value = '';
-                adminChoicePanel.classList.remove('hidden');
-            };
-
-            if (thumbnailFile) {
-                const reader = new FileReader();
-                reader.onload = (e) => processBlog(e.target.result);
-                reader.readAsDataURL(thumbnailFile);
-            } else {
-                processBlog(null);
-            }
-        }
-
-        // --- Admin Auth & Panel Logic ---
-        const adminLogin = document.getElementById('admin-login');
-        const adminChoicePanel = document.getElementById('admin-choice-panel');
-        const projectAdminPanel = document.getElementById('project-admin-panel');
-        const blogAdminPanel = document.getElementById('blog-admin-panel');
-        const correctPassword = 'admin';
-
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'm') {
-                if (sessionStorage.getItem('isAdmin') !== 'true') {
-                    adminLogin.classList.remove('hidden');
-                } else {
-                    adminChoicePanel.classList.remove('hidden');
-                }
-            }
-        });
-
-        function login() {
-            if (document.getElementById('password').value === correctPassword) {
-                sessionStorage.setItem('isAdmin', 'true');
-                adminLogin.classList.add('hidden');
-                adminChoicePanel.classList.remove('hidden');
-                document.getElementById('password').value = '';
-            } else {
-                alert('Incorrect Password');
-            }
-        }
-
-        function logout() {
-            sessionStorage.removeItem('isAdmin');
-            closeAllModals();
-        }
-
-        function showProjectAdmin() {
-            adminChoicePanel.classList.add('hidden');
-            projectAdminPanel.classList.remove('hidden');
-        }
-
-        function showBlogAdmin() {
-            adminChoicePanel.classList.add('hidden');
-            blogAdminPanel.classList.remove('hidden');
-        }
-
-        function closeAdminPanels() {
-            projectAdminPanel.classList.add('hidden');
-            blogAdminPanel.classList.add('hidden');
-            adminChoicePanel.classList.remove('hidden');
-        }
-
-        function closeAllModals() {
-            adminLogin.classList.add('hidden');
-            adminChoicePanel.classList.add('hidden');
-            projectAdminPanel.classList.add('hidden');
-            blogAdminPanel.classList.add('hidden');
-        }
-
         // --- Newsletter Signup ---
         const newsletterForm = document.getElementById('newsletter-form');
         const newsletterStatus = document.getElementById('newsletter-status');
@@ -515,7 +349,14 @@
             e.preventDefault();
             newsletterStatus.textContent = 'Submitting...';
             newsletterStatus.style.color = '#58a6ff';
+            // !!! IMPORTANT !!! Replace with your Google Apps Script URL
             const googleSheetScriptURL = 'https://script.google.com/macros/s/AKfycbyxvsQ6j1bxFSsFuZemNTwUY809_91RBl1rXyXHLCjjcnBF3bPWLgIUDe1jKsweCifS/exec';
+            
+            if (googleSheetScriptURL.includes('YOUR_GOOGLE')) {
+                 newsletterStatus.textContent = 'Setup required. See previous instructions.';
+                 newsletterStatus.style.color = '#f85149';
+                 return;
+            }
             try {
                 await fetch(googleSheetScriptURL, {
                     method: 'POST', mode: 'no-cors',
@@ -537,8 +378,8 @@
         // --- Initial Load ---
         window.onload = () => {
             showSection('about', document.querySelector('.nav-link[href="#about"]'));
-            loadProjects();
-            loadBlogs();
+            renderProjects();
+            renderBlogs();
         };
     </script>
 </body>
