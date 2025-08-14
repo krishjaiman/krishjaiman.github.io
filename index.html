@@ -79,10 +79,30 @@
                 typing 2.5s steps(30, end) forwards,
                 blink-caret .75s step-end 4 forwards;
         }
-        .form-input, .form-textarea {
+        .form-input {
             background-color: #0d1117;
             border: 1px solid #30363d;
             color: #c9d1d9;
+        }
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #30363d;
+            border-bottom-color: #58a6ff;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -215,13 +235,17 @@
         <!-- Projects Section -->
         <section id="projects" class="section">
              <h2 class="text-3xl font-bold text-center mb-12 text-white">My Projects</h2>
-             <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+             <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="loader-container col-span-full"><span class="loader"></span></div>
+             </div>
         </section>
 
         <!-- Blogs Section -->
         <section id="blogs" class="section">
              <h2 class="text-3xl font-bold text-center mb-12 text-white">My Blog Articles</h2>
-             <div id="blogs-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+             <div id="blogs-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="loader-container col-span-full"><span class="loader"></span></div>
+             </div>
         </section>
     </main>
 
@@ -244,6 +268,112 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+        // =========================================================================================
+        // TODO: Add your Firebase Configuration Object here
+        // Follow the setup guide to get this from the Firebase Console
+        // =========================================================================================
+        // Import the functions you need from the SDKs you need
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyAJOMLWZlQURimrogV-mQg2M2zSjbnM8rg",
+          authDomain: "krish-portfolio-3210f.firebaseapp.com",
+          projectId: "krish-portfolio-3210f",
+          storageBucket: "krish-portfolio-3210f.firebasestorage.app",
+          messagingSenderId: "727629814581",
+          appId: "1:727629814581:web:4d1c1bca814981fcd50a7c",
+          measurementId: "G-WH9W77T7GC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        // =========================================================================================
+
+        // --- Get HTML Elements ---
+        const projectsGrid = document.getElementById('projects-grid');
+        const blogsGrid = document.getElementById('blogs-grid');
+
+        // --- Initialize Firebase ---
+        let db;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            // If you enabled Analytics, initialize it
+            if (firebaseConfig.measurementId) {
+                getAnalytics(app);
+            }
+            console.log("Firebase initialized successfully!");
+            fetchData(); // Fetch data once Firebase is ready
+        } catch (e) {
+            console.error("Firebase initialization failed. Please check your firebaseConfig.", e);
+            if (projectsGrid) projectsGrid.innerHTML = `<p class="text-red-500 text-center col-span-full">Error: Could not connect to the database. Please check the Firebase configuration.</p>`;
+            if (blogsGrid) blogsGrid.innerHTML = `<p class="text-red-500 text-center col-span-full">Error: Could not connect to the database. Please check the Firebase configuration.</p>`;
+        }
+        
+        // --- Fetch and Render Data from Firestore ---
+        async function fetchData() {
+            if (!db) return;
+            await fetchCollection('projects', projectsGrid, renderProjectCard);
+            await fetchCollection('blogs', blogsGrid, renderBlogCard);
+        }
+
+        async function fetchCollection(collectionName, gridElement, renderFunction) {
+            try {
+                const q = query(collection(db, collectionName), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                const items = [];
+                querySnapshot.forEach((doc) => {
+                    items.push(doc.data());
+                });
+
+                if (items.length === 0) {
+                    gridElement.innerHTML = `<p class="text-center text-gray-500 col-span-full">No ${collectionName} have been added yet.</p>`;
+                    return;
+                }
+                gridElement.innerHTML = items.map(renderFunction).join('');
+
+            } catch (error) {
+                console.error(`Error fetching ${collectionName}: `, error);
+                gridElement.innerHTML = `<p class="text-red-500 text-center col-span-full">Could not load ${collectionName}.</p>`;
+            }
+        }
+
+        function renderProjectCard(project, i) {
+            return `
+                <div class="card rounded-xl overflow-hidden fade-in" style="animation-delay: ${i * 100}ms">
+                    <img class="h-48 w-full object-cover" src="${project.thumbnail || 'https://placehold.co/600x400/161b22/c9d1d9?text=Project'}" alt="Project thumbnail">
+                    <div class="p-6 card-content flex flex-col">
+                        <h3 class="text-lg font-bold text-white">${project.title}</h3>
+                        <p class="mt-2 text-gray-400 flex-grow">${project.description}</p>
+                        <a href="${project.githubLink}" target="_blank" class="inline-block mt-4 text-sm text-blue-400 font-semibold hover:text-blue-300">
+                            View on GitHub &rarr;
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBlogCard(blog, i) {
+            return `
+                <div class="card rounded-xl overflow-hidden fade-in" style="animation-delay: ${i * 100}ms">
+                    <img class="h-48 w-full object-cover" src="${blog.thumbnail || 'https://placehold.co/600x400/161b22/c9d1d9?text=Article'}" alt="Blog thumbnail">
+                    <div class="p-6">
+                        <a href="${blog.link}" target="_blank" class="block mt-1 text-lg leading-tight font-bold text-white hover:underline">${blog.title}</a>
+                        <p class="mt-2 text-gray-400">${blog.description}</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+
+    <!-- Local Scripts -->
     <script>
         // --- Navigation ---
         const menuBtn = document.getElementById('menu-btn');
@@ -260,87 +390,6 @@
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.querySelectorAll(`a[href="#${sectionId}"]`).forEach(l => l.classList.add('active'));
         }
-
-        // --- Static Project Data ---
-        // To add a new project, copy a block from `{` to `}` and paste it at the beginning of the list.
-        // Fill in your details. For the thumbnail, use a public URL (e.g., from Imgur).
-        const projects = [
-            {
-                title: "AI-Powered Crop Yield Prediction",
-                description: "A machine learning model that uses satellite imagery and weather data to predict crop yields with high accuracy, aiding in precision agriculture.",
-                githubLink: "https://github.com/krishjaiman/your-repo-name",
-                thumbnail: "https://placehold.co/600x400/161b22/58a6ff?text=Project+1"
-            },
-            {
-                title: "LLM Safety with RAG Pipelines",
-                description: "Explored prompt leaking techniques and implemented Retrieval-Augmented Generation (RAG) pipelines to enhance Large Language Model safety and reliability.",
-                githubLink: "https://github.com/krishjaiman/your-repo-name",
-                thumbnail: "https://placehold.co/600x400/161b22/3fb950?text=Project+2"
-            },
-            {
-                title: "Portfolio Website V2",
-                description: "This very website! A dynamic, responsive portfolio built with HTML, Tailwind CSS, and vanilla JavaScript, featuring a no-code admin panel.",
-                githubLink: "https://github.com/krishjaiman/your-repo-name",
-                thumbnail: "https://placehold.co/600x400/161b22/f85149?text=Project+3"
-            }
-        ];
-
-        // --- Static Blog Data ---
-        // To add a new blog, copy a block and add it to the list.
-        // Use a public URL for the thumbnail.
-        const blogs = [
-            { 
-                title: 'Understanding RAG Pipelines', 
-                link: 'https://medium.com/@jaimankrish/understanding-rag-pipelines-retrieval-augmented-generation-455353591464', 
-                description: 'A deep dive into how Retrieval-Augmented Generation is changing the landscape of Large Language Models.',
-                thumbnail: "https://placehold.co/600x400/161b22/c9d1d9?text=Article+1"
-            },
-            { 
-                title: 'The PLeaK Technique in LLMs', 
-                link: '#', // Replace with actual link when available
-                description: 'Exploring the challenges in LLM safety through an in-depth study of the Prompt Leaking (PLeaK) technique.',
-                thumbnail: "https://placehold.co/600x400/161b22/c9d1d9?text=Article+2"
-            }
-        ];
-
-        // --- Rendering Functions ---
-        const projectsGrid = document.getElementById('projects-grid');
-        const blogsGrid = document.getElementById('blogs-grid');
-
-        function renderProjects() {
-            if (!projects || projects.length === 0) {
-                projectsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No projects have been added yet.</p>';
-                return;
-            }
-            projectsGrid.innerHTML = projects.map((project, i) => `
-                <div class="card rounded-xl overflow-hidden fade-in" style="animation-delay: ${i * 100}ms">
-                    <img class="h-48 w-full object-cover" src="${project.thumbnail || 'https://placehold.co/600x400/161b22/c9d1d9?text=Project'}" alt="Project thumbnail">
-                    <div class="p-6 card-content flex flex-col">
-                        <h3 class="text-lg font-bold text-white">${project.title}</h3>
-                        <p class="mt-2 text-gray-400 flex-grow">${project.description}</p>
-                        <a href="${project.githubLink}" target="_blank" class="inline-block mt-4 text-sm text-blue-400 font-semibold hover:text-blue-300">
-                            View on GitHub &rarr;
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderBlogs() {
-            if (!blogs || blogs.length === 0) {
-                blogsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No blog posts have been added yet.</p>';
-                return;
-            }
-            blogsGrid.innerHTML = blogs.map((blog, i) => `
-                <div class="card rounded-xl overflow-hidden fade-in" style="animation-delay: ${i * 100}ms">
-                    <img class="h-48 w-full object-cover" src="${blog.thumbnail || 'https://placehold.co/600x400/161b22/c9d1d9?text=Article'}" alt="Blog thumbnail">
-                    <div class="p-6">
-                        <a href="${blog.link}" target="_blank" class="block mt-1 text-lg leading-tight font-bold text-white hover:underline">${blog.title}</a>
-                        <p class="mt-2 text-gray-400">${blog.description}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
         
         // --- Newsletter Signup ---
         const newsletterForm = document.getElementById('newsletter-form');
@@ -350,10 +399,10 @@
             newsletterStatus.textContent = 'Submitting...';
             newsletterStatus.style.color = '#58a6ff';
             // !!! IMPORTANT !!! Replace with your Google Apps Script URL
-            const googleSheetScriptURL = 'https://script.google.com/macros/s/AKfycbyxvsQ6j1bxFSsFuZemNTwUY809_91RBl1rXyXHLCjjcnBF3bPWLgIUDe1jKsweCifS/exec';
+            const googleSheetScriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
             
             if (googleSheetScriptURL.includes('YOUR_GOOGLE')) {
-                 newsletterStatus.textContent = 'Setup required. See previous instructions.';
+                 newsletterStatus.textContent = 'Setup required. See guide for instructions.';
                  newsletterStatus.style.color = '#f85149';
                  return;
             }
@@ -378,8 +427,6 @@
         // --- Initial Load ---
         window.onload = () => {
             showSection('about', document.querySelector('.nav-link[href="#about"]'));
-            renderProjects();
-            renderBlogs();
         };
     </script>
 </body>
