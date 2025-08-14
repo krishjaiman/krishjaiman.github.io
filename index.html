@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krish Jaiman - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #58a6ff;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: #58a6ff;
+            transition: all 0.3s ease-out;
+        }
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+        }
+        .card-content {
+            flex-grow: 1;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        /* Typewriter effect */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #58a6ff; }
+        }
+        .typewriter h1 {
+            overflow: hidden;
+            border-right: .15em solid #58a6ff; /* The cursor */
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .1em;
+            animation: 
+                typing 2.5s steps(30, end) forwards,
+                blink-caret .75s step-end 4 forwards;
+        }
+
+        .admin-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+        }
+        .form-input, .form-textarea {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300">
+
+    <!-- Header -->
+    <header class="bg-opacity-80 bg-gray-900 backdrop-blur-md sticky top-0 z-50 border-b border-gray-700">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-white font-mono">KJ.</div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="nav-link active" onclick="showSection('about', this)">About</a>
+                <a href="#projects" class="nav-link" onclick="showSection('projects', this)">Projects</a>
+                <a href="#blogs" class="nav-link" onclick="showSection('blogs', this)">Blogs</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800">
+            <a href="#about" class="block py-2 px-4 text-sm hover:bg-gray-700" onclick="showSection('about', this); closeMenu();">About</a>
+            <a href="#projects" class="block py-2 px-4 text-sm hover:bg-gray-700" onclick="showSection('projects', this); closeMenu();">Projects</a>
+            <a href="#blogs" class="block py-2 px-4 text-sm hover:bg-gray-700" onclick="showSection('blogs', this); closeMenu();">Blogs</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <!-- About Section -->
+        <section id="about" class="section active fade-in">
+            <div class="flex flex-col md:flex-row items-center gap-12 min-h-[70vh]">
+                <div class="md:w-1/2 w-full text-center md:text-left">
+                    <div class="typewriter mb-4 inline-block">
+                        <h1 class="text-4xl md:text-5xl font-bold text-white">Krish Jaiman</h1>
+                    </div>
+                    <p class="text-blue-400 mt-2 text-lg">IIT Kharagpur'27 | Research Intern @IISER Kolkata, University of Sydney</p>
+                    <div class="my-4">
+                        <span class="inline-block bg-yellow-400 text-gray-900 text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                            McKinsey Forward Program '25 Alum
+                        </span>
+                    </div>
+                    <p class="mt-4 text-gray-400 max-w-xl">
+                        AI/ML practitioner focused on building impactful data-driven solutions.I specialize in turning complex data into practical products, from machine learning models and NLP pipelines to automation tools and chatbots. Alongside my technical work, I’m deeply interested in business development and the startup ecosystem, aiming to bridge the gap between cutting-edge technology and market-driven impact.
+                    </p>
+                    <div class="mt-6 flex justify-center md:justify-start space-x-4">
+                         <a href="https://www.linkedin.com/in/krish-jaiman-655987293" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"/></svg></a>
+                         <a href="https://github.com/krishjaiman" target="_blank" class="text-gray-300 hover:text-white transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full flex justify-center">
+                    <img class="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover shadow-2xl border-4 border-gray-700" src="https://media.licdn.com/dms/image/v2/D5603AQFsBBlVQ5utHQ/profile-displayphoto-scale_400_400/B56Zip2PQXH0Ak-/0/1755196225390?e=1758153600&v=beta&t=kstxbLS3TQ5m37tF6O3PptWNFsskWmaGa5nR_Fz54Ew" alt="Krish Jaiman" onerror="this.onerror=null;this.src='https://placehold.co/400x400/0d1117/58a6ff?text=KJ';">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+                <!-- Experience -->
+                <div class="card p-6 rounded-xl fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="flex items-center text-2xl font-bold mb-4 text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>Experience</h2>
+                    <div class="space-y-4 border-l-2 border-gray-700 pl-4">
+                        <div>
+                            <h3 class="font-semibold text-lg text-blue-400">R&D Intern | AI </h3>
+                            <p>Mak Design (collab with University of Sydney)</p>
+                            <p class="text-sm text-gray-500">May 2025 - Present</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lg text-blue-400">Research Intern</h3>
+                            <p>IISER Kolkata</p>
+                            <p class="text-sm text-gray-500">Jan 2025 - Mar 2025</p>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Education -->
+                <div class="card p-6 rounded-xl fade-in" style="animation-delay: 0.3s;">
+                    <h2 class="flex items-center text-2xl font-bold mb-4 text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-5.998 12.078 12.078 0 01.665-6.479L12 14z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-5.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222 4 2.222V20" /></svg>Education</h2>
+                    <div class="space-y-4 border-l-2 border-gray-700 pl-4">
+                        <div>
+                            <h3 class="font-semibold text-lg text-blue-400">Indian Institute of Technology, Kharagpur</h3>
+                            <p>B.Tech, Instrumentation Engineering</p>
+                            <p class="text-sm text-gray-500">2023 - 2027</p>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Certifications -->
+                <div class="card p-6 rounded-xl fade-in" style="animation-delay: 0.4s;">
+                    <h2 class="flex items-center text-2xl font-bold mb-4 text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>Certifications</h2>
+                     <div class="flex flex-wrap gap-2">
+                        <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">ADASIVA 2025(Deep Learning Architectures for Image Video and Signal Processing)</span>
+                        <span class="bg-gray-700 text-gray-300 px-3 py-1 rounded-full text-sm">McKinsey Forward Learning Program 2025</span>
+                    </div>
+                </div>
+                <!-- Skills -->
+                <div class="card p-6 rounded-xl fade-in" style="animation-delay: 0.5s;">
+                    <h2 class="flex items-center text-2xl font-bold mb-4 text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>Skills</h2>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">Python</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">SQL</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">Data Analytics</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">Data Science</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">PyTorch</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">LLMs</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">NLP</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">RAG</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">Generative AI</span>
+                        <span class="bg-blue-900/50 text-blue-300 px-3 py-1 rounded-full text-sm">Machine Learning</span>
+                        <span class="bg-yellow-900/50 text-yellow-300 px-3 py-1 rounded-full text-sm">Strategic Planning</span>
+                        <span class="bg-yellow-900/50 text-yellow-300 px-3 py-1 rounded-full text-sm">Business Analytics</span>
+                        <span class="bg-green-900/50 text-green-300 px-3 py-1 rounded-full text-sm">Quantitative Finance</span>
+                    </div>
+                </div>
+                <!-- Hobbies & Interests -->
+                <div class="card p-6 rounded-xl fade-in" style="animation-delay: 0.6s;">
+                    <h2 class="flex items-center text-2xl font-bold mb-4 text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Hobbies & Interests</h2>
+                    <div class="space-y-4 border-l-2 border-gray-700 pl-4">
+                        <div>
+                            <h3 class="font-semibold text-lg text-blue-400">Debating & Public Speaking</h3>
+                            <p class="text-gray-400">Debating Society, IIT Kharagpur(Sep 2023 - Jan 2025)</p>
+                            <p class="text-gray-400">Won Individual Gold for Nehru Hall of Residence in GC Debate 2025</p>
+                            <p class="text-gray-400">Won Verbal Mention in GMUM 2024(Model United Nation competition organized by Communique, IIT Kharagpur)</p>
+                        </div>
+                         <div>
+                            <h3 class="font-semibold text-lg text-blue-400">Writing</h3>
+                            <p class="text-gray-400">Sharing my learnings in Data Science & Machine Learning on Medium</p>
+                            <p class="text-gray-400">Head to the Blogs section of this website to read my blogs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+             <h2 class="text-3xl font-bold text-center mb-12 text-white">My Projects</h2>
+             <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- Blogs Section -->
+        <section id="blogs" class="section">
+             <h2 class="text-3xl font-bold text-center mb-12 text-white">My Blog Articles</h2>
+             <div id="blogs-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 mt-16">
+        <div class="container mx-auto py-8 px-6">
+            <div class="max-w-lg mx-auto text-center">
+                <h3 class="text-2xl font-bold text-white">Join My Newsletter</h3>
+                <p class="text-gray-400 mt-2 mb-4">Get updates on my latest articles and projects.</p>
+                <form id="newsletter-form" class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="newsletter-name" placeholder="Your Name" class="form-input w-full p-2 rounded-md" required>
+                    <input type="email" id="newsletter-email" placeholder="Your Email" class="form-input w-full p-2 rounded-md" required>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Subscribe</button>
+                </form>
+                <p id="newsletter-status" class="mt-4 text-sm"></p>
+            </div>
+            <div class="text-center text-gray-500 mt-8">
+                <p>&copy; 2024 Krish Jaiman. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Modals -->
+    <div id="admin-login" class="admin-modal p-8 rounded-lg shadow-lg w-80 hidden relative">
+        <button onclick="closeAllModals()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <h3 class="text-xl font-bold mb-4 text-white">Admin Login</h3>
+        <input type="password" id="password" placeholder="Password" class="form-input w-full p-2 border rounded mb-4">
+        <button onclick="login()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
+    </div>
+
+    <div id="admin-choice-panel" class="admin-modal p-8 rounded-lg shadow-lg w-96 hidden relative">
+        <button onclick="logout()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <h3 class="text-xl font-bold mb-4 text-white text-center">Admin Menu</h3>
+        <div class="flex gap-4">
+            <button onclick="showProjectAdmin()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Manage Projects</button>
+            <button onclick="showBlogAdmin()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Manage Blogs</button>
+        </div>
+        <button onclick="logout()" class="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700 mt-4">Logout</button>
+    </div>
+
+    <div id="project-admin-panel" class="admin-modal p-8 rounded-lg shadow-lg w-96 hidden relative">
+         <button onclick="closeAdminPanels()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <h3 class="text-xl font-bold mb-4 text-white">Add New Project</h3>
+        <input type="text" id="project-title" placeholder="Project Title" class="form-input w-full p-2 rounded mb-2">
+        <input type="text" id="project-github-link" placeholder="GitHub Link" class="form-input w-full p-2 rounded mb-2">
+        <textarea id="project-description" placeholder="Short Description" class="form-textarea w-full p-2 rounded mb-4" rows="3"></textarea>
+        <label class="text-sm text-gray-400 mb-2 block">Thumbnail Image</label>
+        <input type="file" id="project-thumbnail" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-900/50 file:text-blue-300 hover:file:bg-blue-800/50 mb-4">
+        <button onclick="addProject()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Add Project</button>
+        <button onclick="closeAdminPanels()" class="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 mt-2">Back to Menu</button>
+    </div>
+
+    <div id="blog-admin-panel" class="admin-modal p-8 rounded-lg shadow-lg w-96 hidden relative">
+         <button onclick="closeAdminPanels()" class="absolute top-3 right-3 text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <h3 class="text-xl font-bold mb-4 text-white">Add New Blog Post</h3>
+        <input type="text" id="blog-title" placeholder="Blog Title" class="form-input w-full p-2 rounded mb-2">
+        <input type="text" id="blog-link" placeholder="Medium Link" class="form-input w-full p-2 rounded mb-2">
+        <textarea id="blog-description" placeholder="Short Description" class="form-textarea w-full p-2 rounded mb-4" rows="3"></textarea>
+        <label class="text-sm text-gray-400 mb-2 block">Thumbnail Image</label>
+        <input type="file" id="blog-thumbnail" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-900/50 file:text-blue-300 hover:file:bg-blue-800/50 mb-4">
+        <button onclick="addBlog()" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Add Blog</button>
+        <button onclick="closeAdminPanels()" class="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 mt-2">Back to Menu</button>
+    </div>
+
+    <script>
+        // --- Navigation ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        function closeMenu() { mobileMenu.classList.add('hidden'); }
+
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active', 'fade-in'));
+            const activeSection = document.getElementById(sectionId);
+            activeSection.classList.add('active');
+            void activeSection.offsetWidth;
+            activeSection.classList.add('fade-in');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll(`a[href="#${sectionId}"]`).forEach(l => l.classList.add('active'));
+        }
+
+        // --- Data Storage Keys ---
+        const PROJECTS_STORAGE_KEY = 'portfolioProjectsV3';
+        const BLOGS_STORAGE_KEY = 'portfolioBlogsV3';
+
+        // --- Project Management ---
+        const projectsGrid = document.getElementById('projects-grid');
+        let projects = [];
+
+        function saveProjects() {
+            localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projects));
+        }
+
+        function loadProjects() {
+            const storedProjects = localStorage.getItem(PROJECTS_STORAGE_KEY);
+            projects = storedProjects ? JSON.parse(storedProjects) : [];
+            renderProjects();
+        }
+
+        function renderProjects() {
+            if (projects.length === 0) {
+                projectsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No projects added yet. Add some from the admin panel!</p>';
+                return;
+            }
+            projectsGrid.innerHTML = projects.map((project, i) => `
+                <div class="card rounded-xl overflow-hidden fade-in" style="animation-delay: ${i * 100}ms">
+                    <img class="h-48 w-full object-cover" src="${project.thumbnail || 'https://placehold.co/600x400/161b22/c9d1d9?text=Project'}" alt="Project thumbnail">
+                    <div class="p-6 card-content flex flex-col">
+                        <h3 class="text-lg font-bold text-white">${project.title}</h3>
+                        <p class="mt-2 text-gray-400 flex-grow">${project.description}</p>
+                        <a href="${project.githubLink}" target="_blank" class="inline-block mt-4 text-sm text-blue-400 font-semibold hover:text-blue-300">
+                            View on GitHub &rarr;
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addProject() {
+            const title = document.getElementById('project-title').value;
+            const githubLink = document.getElementById('project-github-link').value;
+            const description = document.getElementById('project-description').value;
+            const thumbnailFile = document.getElementById('project-thumbnail').files[0];
+
+            if (!title || !githubLink || !description) {
+                alert('Please fill all text fields.');
+                return;
+            }
+
+            const processProject = (thumbnailData) => {
+                projects.unshift({ title, githubLink, description, thumbnail: thumbnailData });
+                saveProjects();
+                renderProjects();
+                document.getElementById('project-admin-panel').classList.add('hidden');
+                document.getElementById('project-title').value = '';
+                document.getElementById('project-github-link').value = '';
+                document.getElementById('project-description').value = '';
+                document.getElementById('project-thumbnail').value = '';
+                adminChoicePanel.classList.remove('hidden');
+            };
+
+            if (thumbnailFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => processProject(e.target.result);
+                reader.readAsDataURL(thumbnailFile);
+            } else {
+                processProject(null);
+            }
+        }
+
+        // --- Blog Management ---
+        const blogsGrid = document.getElementById('blogs-grid');
+        let blogs = [];
+
+        function saveBlogs() {
+            localStorage.setItem(BLOGS_STORAGE_KEY, JSON.stringify(blogs));
+        }
+
+        function loadBlogs() {
+            const storedBlogs = localStorage.getItem(BLOGS_STORAGE_KEY);
+            blogs = storedBlogs ? JSON.parse(storedBlogs) : [];
+            renderBlogs();
+        }
+
+        function renderBlogs() {
+            if (blogs.length === 0) {
+                blogsGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No blog posts yet. Stay tuned!</p>';
+                return;
+            }
+            blogsGrid.innerHTML = blogs.map((blog, i) => `
+                <div class="card rounded-xl overflow-hidden fade-in" style="animation-delay: ${i * 100}ms">
+                    <img class="h-48 w-full object-cover" src="${blog.thumbnail || 'https://placehold.co/600x400/161b22/c9d1d9?text=Article'}" alt="Blog thumbnail">
+                    <div class="p-6">
+                        <a href="${blog.link}" target="_blank" class="block mt-1 text-lg leading-tight font-bold text-white hover:underline">${blog.title}</a>
+                        <p class="mt-2 text-gray-400">${blog.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function addBlog() {
+            const title = document.getElementById('blog-title').value;
+            const link = document.getElementById('blog-link').value;
+            const description = document.getElementById('blog-description').value;
+            const thumbnailFile = document.getElementById('blog-thumbnail').files[0];
+
+            if (!title || !link || !description) {
+                alert('Please fill all text fields.');
+                return;
+            }
+            
+            const processBlog = (thumbnailData) => {
+                blogs.unshift({ title, link, description, thumbnail: thumbnailData });
+                saveBlogs();
+                renderBlogs();
+                document.getElementById('blog-admin-panel').classList.add('hidden');
+                document.getElementById('blog-title').value = '';
+                document.getElementById('blog-link').value = '';
+                document.getElementById('blog-description').value = '';
+                document.getElementById('blog-thumbnail').value = '';
+                adminChoicePanel.classList.remove('hidden');
+            };
+
+            if (thumbnailFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => processBlog(e.target.result);
+                reader.readAsDataURL(thumbnailFile);
+            } else {
+                processBlog(null);
+            }
+        }
+
+        // --- Admin Auth & Panel Logic ---
+        const adminLogin = document.getElementById('admin-login');
+        const adminChoicePanel = document.getElementById('admin-choice-panel');
+        const projectAdminPanel = document.getElementById('project-admin-panel');
+        const blogAdminPanel = document.getElementById('blog-admin-panel');
+        const correctPassword = 'admin';
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'm') {
+                if (sessionStorage.getItem('isAdmin') !== 'true') {
+                    adminLogin.classList.remove('hidden');
+                } else {
+                    adminChoicePanel.classList.remove('hidden');
+                }
+            }
+        });
+
+        function login() {
+            if (document.getElementById('password').value === correctPassword) {
+                sessionStorage.setItem('isAdmin', 'true');
+                adminLogin.classList.add('hidden');
+                adminChoicePanel.classList.remove('hidden');
+                document.getElementById('password').value = '';
+            } else {
+                alert('Incorrect Password');
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('isAdmin');
+            closeAllModals();
+        }
+
+        function showProjectAdmin() {
+            adminChoicePanel.classList.add('hidden');
+            projectAdminPanel.classList.remove('hidden');
+        }
+
+        function showBlogAdmin() {
+            adminChoicePanel.classList.add('hidden');
+            blogAdminPanel.classList.remove('hidden');
+        }
+
+        function closeAdminPanels() {
+            projectAdminPanel.classList.add('hidden');
+            blogAdminPanel.classList.add('hidden');
+            adminChoicePanel.classList.remove('hidden');
+        }
+
+        function closeAllModals() {
+            adminLogin.classList.add('hidden');
+            adminChoicePanel.classList.add('hidden');
+            projectAdminPanel.classList.add('hidden');
+            blogAdminPanel.classList.add('hidden');
+        }
+
+        // --- Newsletter Signup ---
+        const newsletterForm = document.getElementById('newsletter-form');
+        const newsletterStatus = document.getElementById('newsletter-status');
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            newsletterStatus.textContent = 'Submitting...';
+            newsletterStatus.style.color = '#58a6ff';
+            const googleSheetScriptURL = 'https://script.google.com/macros/s/AKfycbyxvsQ6j1bxFSsFuZemNTwUY809_91RBl1rXyXHLCjjcnBF3bPWLgIUDe1jKsweCifS/exec';
+            try {
+                await fetch(googleSheetScriptURL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ 
+                        name: document.getElementById('newsletter-name').value, 
+                        email: document.getElementById('newsletter-email').value 
+                    })
+                });
+                newsletterStatus.textContent = 'Thank you for subscribing!';
+                newsletterStatus.style.color = '#3fb950';
+                newsletterForm.reset();
+            } catch (error) {
+                newsletterStatus.textContent = 'Subscription failed. Please try again.';
+                newsletterStatus.style.color = '#f85149';
+            }
+        });
+
+        // --- Initial Load ---
+        window.onload = () => {
+            showSection('about', document.querySelector('.nav-link[href="#about"]'));
+            loadProjects();
+            loadBlogs();
+        };
+    </script>
+</body>
+</html>
